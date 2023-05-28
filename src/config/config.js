@@ -8,6 +8,8 @@ logger.info(`'MODE : ${process.env.ENVIROMENT}'`)
 
 module.exports ={
   NODE:process.env.ENVIRONMENT,
+  GITHUB_STRATEGY: process.env.GITHUB_STRATEGY,
+  MONGO_URI: process.env.MONGO_URI,
   MONGODBURL: process.env.MONGODBURL,
   PRIVATE_KEY_JWT: process.env.PRIVATE_KEY_JWT,
   REGISTER_STRATEGY: process.env.REGISTER_STRATEGY,
@@ -22,7 +24,5 @@ module.exports ={
   MEILING:{
     user:process.env.USERMAILING,
     password:process.env.PASSWORDMAILING
-
   }
-
 }

@@ -36,7 +36,6 @@ class ProductDaoFS {
   };
 
   create = async (objeto) => {
-     
     if (objeto.title || objeto.description || objeto.code || objeto.price || objeto.Status || objeto.stock || objeto.category) {
       const { products } = await readFile(this.path);
       this.Product = products;
@@ -51,8 +50,6 @@ class ProductDaoFS {
     }
   };
 
-
-  
 
   getId = async (id) => {
     const { products } = await readFile(this.path);
@@ -70,7 +67,6 @@ class ProductDaoFS {
     const { products } = await readFile(this.path);
     this.Product = products
     const UpdateProduct = this.Product.findIndex((element) => element.id === id);
-   
     if (UpdateProduct !== -1) {
       const id = this.Product[UpdateProduct].id;
       this.Product[UpdateProduct] = {

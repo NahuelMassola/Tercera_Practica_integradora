@@ -17,8 +17,10 @@ const {mdwLooger, logger} = require('./config/config.winston')
 const loggerTest = require('./controller/logger.controller');
 if (MONGODBURL) import('./config/config.db.js');
 
-const httpServer = server.listen(PORT, () => 
-    logger.debug(`🔥 Server started on port http://localhost:${PORT}`),
+const PORT_APP = Number(PORT) || 8080;
+
+const httpServer = server.listen(PORT_APP, () => 
+    logger.debug(`🔥 Server started on port http://localhost:${PORT_APP}`),
 )
 
 //handlerbars

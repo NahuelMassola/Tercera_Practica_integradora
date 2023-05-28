@@ -1,4 +1,4 @@
-const { productServices } = require("../service");
+const { productServices, sesionServices } = require("../service");
 
 const viewsBd = async (req, res) => {
     
@@ -18,7 +18,7 @@ const viewsBd = async (req, res) => {
         page:products.page,
         prev: products.hasPrevPage,
         next: products.hasNextPage,
-        sessions: req.session
+        sessions: req.session,
     }      
 )}
 

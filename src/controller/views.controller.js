@@ -33,8 +33,6 @@ const addRealTimeProduct = async (req, res)=>{
       emitaddRealtime(add)  
       res.json(add);
     }
-
-
 }
 
 const renderChats =(req, res)=>{
@@ -53,9 +51,6 @@ const forgotPassword = async(req, res)=>{
 const forgotRecovery = async(req, res)=>{
   res.render('forgotrecovery')
 }
-
-
-
 
 module.exports ={
     views,

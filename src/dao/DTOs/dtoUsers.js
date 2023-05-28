@@ -1,5 +1,4 @@
 
-
 const DtoUser = (user) => {
   
   const newUserDto = {
@@ -12,6 +11,6 @@ const DtoUser = (user) => {
 } 
 
 module.exports = {
-    DtoUser
+  DtoUser 
 }
 

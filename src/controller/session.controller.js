@@ -1,8 +1,8 @@
 const { COOKIE_USER}=  require("../config/config");
 const { logger } = require("../config/config.winston");
 const { DtoUser } = require("../dao/DTOs/dtoUsers");
-const { sesionServices } = require("../service");
-const { invalidEmail, passwordinvalid } = require("../utils/creatorMsg");
+const { sesionServices, productServices } = require("../service");
+const { invalidEmail } = require("../utils/creatorMsg");
 const CustomError = require("../utils/customError");
 const { ERROR_USER } = require("../utils/variablesError");
 const mailingService = require("../service/mailing.service");
@@ -29,6 +29,33 @@ const loginRegister = async (req,res)=>{
 const getCurrent = (req, res)=>{
     newUser = DtoUser(req.user)
     res.send(newUser) 
+}
+
+const github = async(req, res) =>{
+  try {
+    
+    const products= await productServices.getProduct();
+    req.user.rol = "USER"
+    const product = products.docs.map((product) => ({
+        title:product.title,
+        description:product.description,
+        category:product.category,
+        price:product.price,
+        stock:product.stock,
+    }
+    )) 
+    res.render("viewProduct", {
+        products: product,
+        totalPage: products.totalPages,
+        page:products.page,
+        prev: products.hasPrevPage,
+        next: products.hasNextPage,
+        firstName: req.user.firstName,
+        rol: req.user.rol
+    })
+  } catch (error) {
+      return HttpResp.Error(res,  "ERROR" , error)
+  }
 }
 
 
@@ -100,6 +127,7 @@ module.exports={
     sessionLogin,
     loginRegister,
     getCurrent,
+    github,
     forgotPassword,
     forgotrecovery,
     roleChange,

@@ -3,17 +3,13 @@ const passportLocal = require("passport-local");
 const { hashPassword, comparePassword } = require("./hashPassword");
 const {Strategy, ExtractJwt } = require('passport-jwt');
 const { generateToken } = require("./jwt");
-const { COOKIE_USER, JWT_STRATEGY, REGISTER_STRATEGY, LOGIN_STRATEGY, PRIVATE_KEY_JWT, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = require("../config/config");
+const { COOKIE_USER, JWT_STRATEGY, REGISTER_STRATEGY, LOGIN_STRATEGY, PRIVATE_KEY_JWT, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_STRATEGY } = require("../config/config");
 const { sesionServices, cartsServices } = require("../service");
 const { default: mongoose } = require("mongoose");
 const { logger } = require("../config/config.winston");
 const GithubStrategy = require('passport-github2');
 const userModel = require("../dao/models/user.model");
-const sessionService = require('../service/session.service');
-const SessionService = require("../service/session.service");
 const userModelGithub = require("../dao/models/userModelGithub");
-
-
 
 
 const cookieEstractor = (req) =>{
@@ -37,7 +33,6 @@ passport.use(
           const user = await sesionServices.getUserId (payload.id);
           done (null, {user})
     } catch (error) {
-      
       done(error)
     }
 })
@@ -138,6 +133,35 @@ passport.use(
       }
     )
   );
+
+  passport.use(
+    GITHUB_STRATEGY,
+    new GithubStrategy({
+        clientID: GITHUB_CLIENT_ID,
+        clientSecret: GITHUB_CLIENT_SECRET,
+        callbackUrl: "http://localhost:8080/api/session/github/callback",
+    },
+    async (accessToken , refreshToken , profile , done) => {
+        try {
+        let user = await userModelGithub.findOne({ email: profile._json?.email});
+        if(!user){
+            let addNewUser = {
+                firstName: profile._json.name,
+                email: profile._json?.email,
+                password: ""
+            };
+            let newUser = await userModelGithub.create(addNewUser);
+            
+            done(null , newUser);
+        } else {
+            done(null ,user);
+        }
+        } catch (error) {
+            return done(error);
+        }
+    } 
+    )
+);
 
 
 passport.serializeUser((user , done) =>{
